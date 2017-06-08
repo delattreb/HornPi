@@ -23,7 +23,6 @@ class Config:
         self.config['APPLICATION']['name'] = 'HornPi'
         self.config['APPLICATION']['version'] = '1.0.0'
         self.config['APPLICATION']['author'] = '(C) - Bruno DELATTRE'
-        self.config['APPLICATION']['splashduration'] = '1'
         
         # LOGGER
         self.config['LOGGER'] = {}
