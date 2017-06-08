@@ -91,7 +91,7 @@ class GPS:
             
             if self.mode >= 2:
                 if setdb:
-                    dal.setCoordinate(self.mode, self.longitude, self.latitude, self.altitude,
+                    dal.setcoordinate(self.mode, self.longitude, self.latitude, self.altitude,
                                       self.lonprecision, self.latprecision, self.altprecision, self.hspeed)
                     logger.info('GPS info -> database')
         except:

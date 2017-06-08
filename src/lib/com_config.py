@@ -32,6 +32,11 @@ class Config:
         self.config['LOGGER']['logfile'] = 'log'
         self.config['LOGGER']['logfilesize'] = '1000000'
         
+        # DATA
+        self.config['DATA'] = {}
+        self.config['DATA']['range'] = '0.01'
+        self.config['DATA']['distance'] = '0.800'  # meter
+        
         # Import RadarFile
         self.config['RadarFile'] = {}
         self.config['RadarFile']['directory'] = 'utils/RadarFile'

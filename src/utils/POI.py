@@ -9,6 +9,9 @@ Source: http://carte-gps-gratuite.fr/radars-et-points-d-interet.html
 import csv
 import os
 import sqlite3
+from operator import itemgetter
+
+import haversine
 
 from dal import dal_radarcoordinate
 from lib import com_config, com_logger
@@ -22,25 +25,20 @@ class POI:
         # Config
         conf = com_config.Config()
         self.config = conf.getconfig()
-
+        
         # Get database name
         self.database = self.config['SQLITE']['database']
-
+        
         # Database
         self.connection = sqlite3.Connection(self.database)
         self.cursor = self.connection.cursor()
     
-    def delteradarcoordinate(self):
-        dal = dal_radarcoordinate.DAL_radarcoordinate(self.connection, self.cursor)
-        dal.delCoordinate()
-    
-    def insertdatabase(self, longitude, latitude, speed, name, country):
-        dal = dal_radarcoordinate.DAL_radarcoordinate(self.connection, self.cursor)
-        dal.setCoordinate(longitude, latitude, speed, name, country)
-    
     def importpoi(self):
+        # DAL
+        dal = dal_radarcoordinate.DAL_radarcoordinate(self.connection, self.cursor)
+        
         self.logger.info('Delete database')
-        self.delteradarcoordinate()
+        dal.delcoordinate()
         self.logger.info('Import RadarFile')
         
         for root, dirs, files in os.walk(self.config['RadarFile']['directory']):
@@ -59,4 +57,30 @@ class POI:
                             int(speed)
                         except ValueError:
                             speed = 0
-                        self.insertdatabase(float(row[0]), float(row[1]), float(speed), lib, country)
+                        dal.setcoordinate(float(row[0]), float(row[1]), float(speed), lib, country)
+    
+    def getradararound(self, latitude, longitude, distancealerte):
+        lat_x1 = latitude - float(self.config['DATA']['range'])
+        lat_x2 = latitude + float(self.config['DATA']['range'])
+        
+        lon_x1 = longitude - float(self.config['DATA']['range'])
+        lon_x2 = longitude + float(self.config['DATA']['range'])
+        
+        # DAL
+        dal = dal_radarcoordinate.DAL_radarcoordinate(self.connection, self.cursor)
+        points = dal.getaroundcoordinate(lat_x1, lat_x2, lon_x1, lon_x2)
+        
+        listalerte = []
+        
+        for point in points:
+            point1 = latitude, longitude,
+            point2 = point[0], point[1]
+            distance = haversine.haversine(point1, point2)
+            if distance < distancealerte:
+                point += (distance,)
+                listalerte.append(point)
+        
+        if len(listalerte) > 0:
+            listalerte.sort(key = itemgetter(3), reverse = False)
+        
+        return listalerte

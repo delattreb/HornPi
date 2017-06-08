@@ -7,10 +7,10 @@ Date : 07/08/2016
 import datetime
 
 from lib import com_config, com_logger
+from utils import POI
 
 # Config
 conf = com_config.Config()
-# TODO : Delete for launch
 conf.setconfig()
 config = conf.getconfig()
 
@@ -22,8 +22,12 @@ logger.info('Application start')
 start = datetime.datetime.now()
 
 # Import RadarFile
-# poi = POI.POI()
+poi = POI.POI()
 # poi.importpoi()
+
+listealerte = poi.getradararound(49.5, 1.15, float(config['DATA']['distance']))
+if len(listealerte) > 0:
+    print(listealerte[0][2])
 
 # Stop time
 end = datetime.datetime.now()
