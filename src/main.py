@@ -7,6 +7,7 @@ Date : 07/08/2016
 import datetime
 
 from lib import com_config, com_logger
+from lib.driver import com_gps
 from utils import POI
 
 # Config
@@ -18,19 +19,23 @@ config = conf.getconfig()
 logger = com_logger.Logger()
 logger.info('Application start')
 
-# Start time
-start = datetime.datetime.now()
+bpoiimport = False
+if bpoiimport:
+    # Import RadarFile
+    # Start time
+    start = datetime.datetime.now()
+    poi = POI.POI()
+    poi.importpoi()
+    # Stop time
+    end = datetime.datetime.now()
+    logger.info('Import duration: ' + str(end - start))
 
-# Import RadarFile
-poi = POI.POI()
-# poi.importpoi()
+while True:
+    gps = com_gps.GPS()
+    gps.getlocalisation()
+    if gps.mode >= 2:
+        listealerte = poi.getradararound(gps.latitude, gps.longitude, float(config['DATA']['distance']))
+        if len(listealerte) > 0:
+            print(listealerte[0][2])
 
-listealerte = poi.getradararound(49.5, 1.15, float(config['DATA']['distance']))
-if len(listealerte) > 0:
-    print(listealerte[0][2])
-
-# Stop time
-end = datetime.datetime.now()
-
-logger.info('Import duration: ' + str(end - start))
 logger.info('Application stop')

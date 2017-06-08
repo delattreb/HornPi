@@ -15,7 +15,6 @@ cgps -s
 
 import gpsd
 
-from dal import dal_radarcoordinate
 from lib import com_logger
 
 
@@ -36,7 +35,7 @@ class GPS:
         
         # Connect to the local gpsd
         gpsd.connect()
-
+    
     def gettime(self):
         ret = ''
         try:
@@ -49,9 +48,8 @@ class GPS:
         except:
             pass
         return ret
-
-    def getlocalisation(self, connection, cursor, setdb = True):
-        dal = dal_radarcoordinate.DAL_GPS(connection, cursor)
+    
+    def getlocalisation(self):
         logger = com_logger.Logger('GPS')
         try:
             # Get gps position
@@ -83,16 +81,5 @@ class GPS:
                 self.hspeed = packet.hspeed
                 self.lonprecision = packet.error['x']
                 self.latprecision = packet.error['y']
-            
-            if self.mode >= 3:
-                self.altitude = packet.altitude()
-                self.altprecision = packet.error['v']
-                # self.vspeed = packet.speed_vertical()
-            
-            if self.mode >= 2:
-                if setdb:
-                    dal.setcoordinate(self.mode, self.longitude, self.latitude, self.altitude,
-                                      self.lonprecision, self.latprecision, self.altprecision, self.hspeed)
-                    logger.info('GPS info -> database')
-        except:
-            logger.error('GPS exception')
+        except Exception as e:
+            logger.error('GPS exception:' + str(e))
