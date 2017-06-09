@@ -19,8 +19,8 @@ class LCD:
         font_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'fonts', 'FreeSans.ttf'))
         self.smallfont = ImageFont.truetype(font_path, 10)
         self.normalfont = ImageFont.truetype(font_path, 14)
-        self.bigfont = ImageFont.truetype(font_path, 35)
-
+        self.bigfont = ImageFont.truetype(font_path, 18)
+    
     def splash(self, level, name, author, version):
         if int(level) > 10:
             i = 0
@@ -103,12 +103,12 @@ class LCD:
             
             bx = dx
             by = dy
-
+    
     @staticmethod
     def displayoff():
         with canvas(device) as draw:
             draw.rectangle((0, 0, device.width, device.height), outline = 0, fill = 0)
-
+    
     @staticmethod
     def displaysensor():
         pass
@@ -126,28 +126,28 @@ class LCD:
         #     ds18b20 = com_ds18b20.DS18B20()
         #     draw.text((1, 11), 'DS18B20 Int: ' + str(ds18b20.read('DS18B20 Interior', self.config['GPIO']['DS18B20_1'], connection, cursor, False)) + '°C', fill = "white")
         #     # self.lcd.text((1, 21), 'DS18B20 Ext: ' + str(ds18b20.read('DS18B20 Exterior', self.config['GPIO']['DS18B20_2'])) + '°C',  fill = "white")
-
+    
     @staticmethod
     def displaygpsinformation(mode, longitude, latitude, altitude, lonprecision, latprecision, altprecision, hspeed, sats, track):
         with canvas(device) as draw:
             if mode >= 2:
                 draw.text((1, 1), datetime.datetime.strftime(datetime.datetime.now(), '%Y %m %d %H:%M:%S'), fill = "white")
-
+                
                 draw.text((1, 12), 'Lo:' + str(longitude)[:8], fill = "white")
                 draw.text((1, 22), 'La:' + str(latitude)[:8], fill = "white")
                 draw.text((1, 32), 'Al: ' + str(altitude), fill = "white")
-
+                
                 draw.text((69, 12), '+/-:' + str(lonprecision)[:5], fill = "white")
                 draw.text((69, 22), '+/-:' + str(latprecision)[:5], fill = "white")
                 draw.text((69, 32), '+/-:' + str(altprecision)[:5], fill = "white")
-
+                
                 draw.text((1, 44), 'SH:' + str(hspeed), fill = "white")
                 # draw.text((65, 44), 'SV:' + str(0), fill = "white")
                 draw.text((1, 54), 'Sats: ' + str(sats), fill = "white")
                 draw.text((63, 54), 'track: ' + str(track), fill = "white")
-
+                
                 time.sleep(3)
-
+    
     def displaystart(self, cpt):
         memo = cpt
         for i in range(cpt):
@@ -155,3 +155,13 @@ class LCD:
                 draw.text((36, 5), '- START -', fill = "white")
                 draw.text((55, 25), str(memo - i), fill = "white", font = self.bigfont)
                 time.sleep(1)
+    
+    def displaynogps(self):
+        with canvas(device) as draw:
+            draw.text((25, 5), 'NO GPS', fill = "white")
+    
+    def displayspeed(self, name, speed, distance):
+        with canvas(device) as draw:
+            draw.text((0, 5), '' + name, fill = "white", font = self.bigfont)
+            draw.text((0, 25), 'Vitesse: ' + str(speed), fill = "white", font = self.bigfont)
+            draw.text((0, 45), 'Distance: ' + str(distance), fill = "white", font = self.bigfont)

@@ -5,9 +5,10 @@ Date : 07/08/2016
 """
 
 import datetime
+import time
 
-from lib import com_config, com_lcd, com_logger
-from lib.driver import com_gps
+from lib import com_config, com_logger
+from lib.driver import com_gps, com_lcd
 from utils import POI
 
 # Config
@@ -25,11 +26,21 @@ gps = com_gps.GPS()
 # LCD
 lcd = com_lcd.LCD()
 # LCD Splash
-lcd.splash(config['LOGGER']['levelconsole'], config['APPLICATION']['name'], config['APPLICATION']['author'], 'v' + config['APPLICATION']['version'])
+logger.info('Splash screen')
+# lcd.splash(config['LOGGER']['levelconsole'], config['APPLICATION']['name'], config['APPLICATION']['author'], 'v' + config['APPLICATION']['version'])
 
 # POI
 poi = POI.POI()
-bpoiimport = False
+
+
+# TODO : Check in /boot if update file
+
+def checkupdatepoifile():
+    # config['RadarFile']['poi'] =
+    pass
+
+
+bpoiimport = True
 if bpoiimport:
     # Import RadarFile
     # Start time
@@ -40,11 +51,22 @@ if bpoiimport:
     end = datetime.datetime.now()
     logger.info('Import duration: ' + str(end - start))
 
-while True:
-    gps.getlocalisation()
-    if gps.mode >= 2:
-        listealerte = poi.getradararound(gps.latitude, gps.longitude, float(config['DATA']['distance']))
-        if len(listealerte) > 0:
-            print(listealerte[0][2])
+# TODO : Display image when GPS isn't connected
+# Check GPS connection
+logger.info('Check GPS connexion')
+mode = 0
+while mode < 2:
+    mode, latitude, longitude = gps.getlocalisation()
+    lcd.displaynogps()
+lcd.displayoff()
+logger.info('GPS connected')
 
-logger.info('Application stop')
+while True:
+    time.sleep(3)
+    mode, latitude, longitude = gps.getlocalisation()
+    if mode >= 2:
+        listealerte = poi.getradararound(latitude, longitude, float(config['DATA']['distance']))
+        if len(listealerte) > 0:
+            for alerte in listealerte:
+                logger.info('Name: ' + alerte[2] + ' Speed:' + str(alerte[3]))
+                lcd.displayspeed(alerte[2], alerte[3], alerte[4])
