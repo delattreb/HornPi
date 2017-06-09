@@ -41,7 +41,7 @@ class POI:
         dal.delcoordinate()
         self.logger.info('Import RadarFile')
         
-        for root, dirs, files in os.walk(self.config['RadarFile']['directory']):
+        for root, dirs, files in os.walk(self.config['RadarFile']['filedirectory']):
             for item in files:
                 src_path = os.path.join(root, item)
                 self.logger.info('Compute file: ' + item)

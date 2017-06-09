@@ -26,21 +26,22 @@ class Config:
         
         # LOGGER
         self.config['LOGGER'] = {}
-        self.config['LOGGER']['levelconsole'] = '20'  # DEBUG=10 INFO=20 WARNING=30 ERROR=40 #CRITICAL=50
+        self.config['LOGGER']['levelconsole'] = '10'  # DEBUG=10 INFO=20 WARNING=30 ERROR=40 #CRITICAL=50
         self.config['LOGGER']['levelfile'] = '20'
         self.config['LOGGER']['logfile'] = 'log'
         self.config['LOGGER']['logfilesize'] = '1000000'
         
         # DATA
         self.config['DATA'] = {}
-        self.config['DATA']['range'] = '0.01'
-        self.config['DATA']['distance'] = '0.800'  # meter
+        self.config['DATA']['range'] = '0.05'
+        self.config['DATA']['distance'] = '2.800'  # meter
         
         # Import RadarFile
         self.config['RadarFile'] = {}
-        self.config['RadarFile']['directory'] = 'utils/RadarFile'
-        self.config['RadarFile']['poi'] = '/boot/zones-de-danger-garmin.zip'
-        
+        self.config['RadarFile']['destdirectory'] = 'utils/RadarFile'
+        self.config['RadarFile']['filedirectory'] = 'utils/RadarFile/radar'
+        self.config['RadarFile']['sourcefile'] = '/boot/radar.zip'
+
         # SQLite
         self.config['SQLITE'] = {}
         self.config['SQLITE']['database'] = 'database.db'

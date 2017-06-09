@@ -81,7 +81,6 @@ class viewport(mixin.capabilities):
         assert (x <= self.width - hotspot.width)
         assert (y <= self.height - hotspot.height)
         
-        # TODO: should it check to see whether hotspots overlap each other?
         # Is sensible to _allow_ them to overlap?
         self._hotspots.append((hotspot, xy))
     
@@ -155,7 +154,7 @@ class hotspot(mixin.capabilities):
     """
     
     def __init__(self, width, height, draw_fn = None):
-        self.capabilities(width, height)  # TODO: set mode?
+        self.capabilities(width, height)
         self._fn = draw_fn
     
     def paste_into(self, image, xy):

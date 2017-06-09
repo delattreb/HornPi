@@ -136,7 +136,6 @@ class sh1106(device):
             self.height = height
             self._pages = self.height // 8
             
-            # FIXME: Delay doing anything here with alternate screen sizes
             # until we are able to get a device to test with.
             if width != 128 or height != 64:
                 raise ValueError("Unsupported display mode: {0}x{1}".format(width, height))
