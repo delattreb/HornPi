@@ -45,20 +45,23 @@ class POI:
             for item in files:
                 src_path = os.path.join(root, item)
                 self.logger.info('Compute file: ' + item)
-                speed = item[:-4]
-                speed = speed[-3:]
-                country = item[:3]
-                with open(src_path, newline = '') as csvfile:
-                    spamreader = csv.reader(csvfile, delimiter = ',', quotechar = '|')
-                    for row in spamreader:
-                        lib = str.replace(row[2], '"', '')
-                        lib = lib[:-3]
-                        self.logger.debug('Insert: ' + row[0] + ' ' + row[1] + ' ' + lib[3:] + ' ' + country)
-                        try:
-                            int(speed)
-                        except ValueError:
-                            speed = 0
-                        dal.setcoordinate(float(row[0]), float(row[1]), float(speed), lib[3:], country)
+                try:
+                    speed = item[:-4]
+                    speed = speed[-3:]
+                    country = item[:3]
+                    with open(src_path, newline = '') as csvfile:
+                        spamreader = csv.reader(csvfile, delimiter = ',', quotechar = '|')
+                        for row in spamreader:
+                            lib = str.replace(row[2], '"', '')
+                            lib = lib[:-3]
+                            self.logger.debug('Insert: ' + row[0] + ' ' + row[1] + ' ' + lib[3:] + ' ' + country)
+                            try:
+                                int(speed)
+                            except ValueError:
+                                speed = 0
+                            dal.setcoordinate(float(row[0]), float(row[1]), float(speed), lib[3:], country)
+                except Exception as e:
+                    self.logger.error(item + ' ' + str(e))
     
     def getradararound(self, latitude, longitude, distancealerte):
         lat_x1 = latitude - float(self.config['DATA']['range'])
