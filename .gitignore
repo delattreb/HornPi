@@ -101,3 +101,5 @@ ENV/
 .idea/
 /src/log
 /src/utils/RadarFile/
+/src/pycharm.log
+/src/radar.zip

@@ -23,9 +23,6 @@ config = conf.getconfig()
 logger = com_logger.Logger()
 logger.info('Application start')
 
-# GPS
-gps = com_gps.GPS()
-
 # LCD
 lcd = com_lcd.LCD()
 # LCD Splash
@@ -35,7 +32,7 @@ logger.info('Splash screen')
 # POI
 poi = POI.POI()
 
-# TODO : Check in /boot if update file
+# Import Radar file
 # region Import Radar file
 if os.path.exists(config['RadarFile']['sourcefile']):
     logger.info('Found update radar file')
@@ -66,21 +63,28 @@ else:
 
 # Check GPS connection
 logger.info('Check GPS connexion')
-mode = 0
-while mode < 2:
-    mode, latitude, longitude = gps.getlocalisation()
-    lcd.displaynogps()
-lcd.displayoff()
+# GPS
+gps = com_gps.GPS()
+gps.mode = 0
+while gps.mode < 2:
+    gps.getlocalisation()
+    lcd.displaygpsinformation(gps)
+    time.sleep(1)
 logger.info('GPS connected')
 
 while True:
-    time.sleep(3)
-    mode, latitude, longitude = gps.getlocalisation()
-    if mode >= 2:
-        listealerte = poi.getradararound(latitude, longitude, float(config['DATA']['distance']))
+    gps.getlocalisation()
+    if gps.mode >= 2:
+        logger.debug('Hspeed: ' + str(gps.hspeed) + ' Sats: ' + str(gps.sats))
+        listealerte = poi.getradararound(gps.latitude, gps.longitude, float(config['DATA']['distance']))
         if len(listealerte) > 0:
+            cpt = 0
             for alerte in listealerte:
-                logger.info('Name: ' + alerte[2] + ' Speed:' + str(alerte[3]))
-                lcd.displayspeed(alerte[2], alerte[3], alerte[4])
+                logger.debug(str(cpt) + '. ' + alerte[2] + ' Speed: ' + str(alerte[3]) + ' Dist: ' + str(round(alerte[4], 2)))
+                cpt += 1
+            lcd.displayspeed(listealerte[0][2], listealerte[0][3], listealerte[0][4])
         else:
             logger.info('No radar')
+    else:
+        lcd.displaynogps()
+    time.sleep(2)

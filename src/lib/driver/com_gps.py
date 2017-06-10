@@ -32,9 +32,6 @@ class GPS:
         self.altprecision = 0.0
         self.hspeed = 0.0
         self.vspeed = 0.0
-
-        # Logger
-        self.logger = com_logger.Logger('GPS')
         
         # Connect to the local gpsd
         gpsd.connect()
@@ -53,24 +50,25 @@ class GPS:
         return ret
     
     def getlocalisation(self):
-        
+        logger = com_logger.Logger('GPS')
+        self.mode = 0
         try:
             # Get gps position
             packet = gpsd.get_current()
             
             # Debug info GPS
-            self.logger.debug('mode:' + str(packet.mode))
-            self.logger.debug('lon:' + str(packet.lon))
-            self.logger.debug('lat:' + str(packet.lat))
-            self.logger.debug('alt:' + str(packet.alt))
-            self.logger.debug('hspeed:' + str(packet.hspeed))
+            logger.debug('mode:' + str(packet.mode))
+            logger.debug('lon:' + str(packet.lon))
+            logger.debug('lat:' + str(packet.lat))
+            logger.debug('alt:' + str(packet.alt))
+            logger.debug('hspeed:' + str(packet.hspeed))
             # logger.debug('vspeed:' + str(packet.speed_vertical()))
-            self.logger.debug('lon +/-:' + str(packet.error['x']))
-            self.logger.debug('lat +/-:' + str(packet.error['y']))
-            self.logger.debug('alt +/-:' + str(packet.error['v']))
-            self.logger.debug('sats:' + str(packet.sats))
-            self.logger.debug('track:' + str(packet.track))
-            self.logger.debug('time:' + str(packet.time))
+            logger.debug('lon +/-:' + str(packet.error['x']))
+            logger.debug('lat +/-:' + str(packet.error['y']))
+            logger.debug('alt +/-:' + str(packet.error['v']))
+            logger.debug('sats:' + str(packet.sats))
+            logger.debug('track:' + str(packet.track))
+            logger.debug('time:' + str(packet.time))
             
             # See the inline docs for GpsResponse for the available data
             self.altitude = 0.0
@@ -84,7 +82,10 @@ class GPS:
                 self.hspeed = packet.hspeed
                 self.lonprecision = packet.error['x']
                 self.latprecision = packet.error['y']
-        except Exception as e:
-            self.logger.error('Exception:' + str(e))
-        finally:
-            return self.mode, self.latitude, self.longitude
+            
+            if self.mode >= 3:
+                self.altitude = packet.altitude()
+                self.altprecision = packet.error['v']
+                # self.vspeed = packet.speed_vertical()
+        except:
+            logger.error('GPS exception')

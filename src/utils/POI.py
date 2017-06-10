@@ -85,7 +85,7 @@ class POI:
                 listalerte.append(point)
         
         if len(listalerte) > 0:
-            self.logger.debug('Radar find: ' + str(len(listalerte)))
+            self.logger.info('Radar find: ' + str(len(listalerte)))
             listalerte.sort(key = itemgetter(4), reverse = False)
         
         return listalerte
