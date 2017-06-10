@@ -138,9 +138,12 @@ class LCD:
         with canvas(device) as draw:
             draw.text((0, 17), 'SIGNAL', fill = "white", font = self.bigfont)
     
+    def displaynoradar(self):
+        with canvas(device) as draw:
+            draw.text((0, 17), 'COOL !', fill = "white", font = self.bigfont)
+    
     def displayspeed(self, name, speed, distance):
         with canvas(device) as draw:
             draw.text((0, 0), name, fill = "white", font = self.smallfont)
             draw.text((0, 12), str(round(distance, 2)) + ' Km', fill = "white", font = self.normalfont)
             draw.text((0, 31), '' + str(speed), fill = "white", font = self.bigfont)
-
