@@ -78,10 +78,10 @@ while True:
         logger.debug('Hspeed: ' + str(gps.hspeed) + ' Sats: ' + str(gps.sats))
         listealerte = poi.getradararound(gps.latitude, gps.longitude, float(config['DATA']['distance']))
         if len(listealerte) > 0:
-            # ListeAlerte: 0: Distance 1: latiture 2: longitude 3: name 4: speed
-            lcd.displayspeed(listealerte[0][2], listealerte[0][3], listealerte[0][4])
+            # ListeAlerte: 0: latiture 1: longitude 2: name 3: speed 4 : Distance
+            lcd.displayspeed(listealerte[0][2], listealerte[0][3], listealerte[0][4], gps)
         else:
-            lcd.displaynoradar()
+            lcd.displaynoradar(gps)
 
 # region Temp for debug
         if len(listealerte) > 0:

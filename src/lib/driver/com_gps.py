@@ -79,7 +79,7 @@ class GPS:
                 self.longitude = packet.lon
                 self.latitude = packet.lat
                 self.timeutc = packet.time
-                self.hspeed = packet.hspeed
+                self.hspeed = round(packet.hspeed * 1.60934, 1)
                 self.lonprecision = packet.error['x']
                 self.latprecision = packet.error['y']
             

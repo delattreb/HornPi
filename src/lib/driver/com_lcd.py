@@ -16,9 +16,11 @@ from lib.driver.oled.render import canvas
 class LCD:
     def __init__(self):
         font_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'fonts', 'FreeSans.ttf'))
+        self.extrasmallfont = ImageFont.truetype(font_path, 11)
         self.smallfont = ImageFont.truetype(font_path, 12)
-        self.normalfont = ImageFont.truetype(font_path, 20)
-        self.bigfont = ImageFont.truetype(font_path, 34)
+        self.normalfont = ImageFont.truetype(font_path, 24)
+        self.bigfont = ImageFont.truetype(font_path, 51)
+        self.signalfont = ImageFont.truetype(font_path, 35)
     
     def splash(self, level, name, author, version):
         if int(level) > 10:
@@ -136,14 +138,20 @@ class LCD:
     
     def displaynogps(self):
         with canvas(device) as draw:
-            draw.text((0, 17), 'SIGNAL', fill = "white", font = self.bigfont)
+            draw.text((0, 17), 'SIGNAL', fill = "white", font = self.signalfont)
     
-    def displaynoradar(self):
+    def displaynoradar(self, gps):
         with canvas(device) as draw:
+            # Display Info
+            draw.text((60, 0), 'D:' + str(gps.track) + ' V:' + str(int(gps.hspeed)), fill = "white", font = self.extrasmallfont)
+            
             draw.text((0, 17), 'COOL !', fill = "white", font = self.bigfont)
     
-    def displayspeed(self, name, speed, distance):
+    def displayspeed(self, name, speed, distance, gps):
         with canvas(device) as draw:
-            draw.text((0, 0), name, fill = "white", font = self.smallfont)
-            draw.text((0, 12), str(round(distance, 2)) + ' Km', fill = "white", font = self.normalfont)
-            draw.text((0, 31), '' + str(speed), fill = "white", font = self.bigfont)
+            # Display Info
+            draw.text((60, 0), 'D:' + str(gps.track) + '  V:' + str(int(gps.hspeed)), fill = "white", font = self.extrasmallfont)
+            
+            # draw.text((0, 0), name, fill = "white", font = self.smallfont)
+            draw.text((0, 0), str(int(speed)), fill = "white", font = self.normalfont)
+            draw.text((0, 15), str(round(distance, 2)) + 'K', fill = "white", font = self.bigfont)

@@ -34,7 +34,7 @@ class Config:
         # DATA
         self.config['DATA'] = {}
         self.config['DATA']['range'] = '0.027' # simplification
-        self.config['DATA']['distance'] = '2.0'  # kilometer
+        self.config['DATA']['distance'] = '3.0'  # kilometer
         
         # Import RadarFile
         self.config['RadarFile'] = {}
