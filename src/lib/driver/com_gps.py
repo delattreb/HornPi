@@ -51,6 +51,7 @@ class GPS:
     
     def getlocalisation(self):
         logger = com_logger.Logger('GPS')
+        self.mode = 0
         try:
             # Get gps position
             packet = gpsd.get_current()
@@ -78,8 +79,13 @@ class GPS:
                 self.longitude = packet.lon
                 self.latitude = packet.lat
                 self.timeutc = packet.time
-                self.hspeed = packet.hspeed
+                self.hspeed = round(packet.hspeed * 1.60934, 1)
                 self.lonprecision = packet.error['x']
                 self.latprecision = packet.error['y']
-        except Exception as e:
-            logger.error('GPS exception:' + str(e))
+            
+            if self.mode >= 3:
+                self.altitude = packet.altitude()
+                self.altprecision = packet.error['v']
+                # self.vspeed = packet.speed_vertical()
+        except:
+            logger.error('GPS exception')

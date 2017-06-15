@@ -23,24 +23,25 @@ class Config:
         self.config['APPLICATION']['name'] = 'HornPi'
         self.config['APPLICATION']['version'] = '1.0.0'
         self.config['APPLICATION']['author'] = '(C) - Bruno DELATTRE'
-        self.config['APPLICATION']['splashduration'] = '1'
         
         # LOGGER
         self.config['LOGGER'] = {}
-        self.config['LOGGER']['levelconsole'] = '20'  # DEBUG=10 INFO=20 WARNING=30 ERROR=40 #CRITICAL=50
+        self.config['LOGGER']['levelconsole'] = '10'  # DEBUG=10 INFO=20 WARNING=30 ERROR=40 #CRITICAL=50
         self.config['LOGGER']['levelfile'] = '20'
         self.config['LOGGER']['logfile'] = 'log'
         self.config['LOGGER']['logfilesize'] = '1000000'
         
         # DATA
         self.config['DATA'] = {}
-        self.config['DATA']['range'] = '0.01'
-        self.config['DATA']['distance'] = '0.800'  # meter
+        self.config['DATA']['range'] = '0.027' # simplification
+        self.config['DATA']['distance'] = '3.0'  # kilometer
         
         # Import RadarFile
         self.config['RadarFile'] = {}
-        self.config['RadarFile']['directory'] = 'utils/RadarFile'
-        
+        self.config['RadarFile']['destdirectory'] = 'utils/RadarFile'
+        self.config['RadarFile']['filedirectory'] = 'utils/RadarFile/radar'
+        self.config['RadarFile']['sourcefile'] = '/boot/radar.zip'
+
         # SQLite
         self.config['SQLITE'] = {}
         self.config['SQLITE']['database'] = 'database.db'

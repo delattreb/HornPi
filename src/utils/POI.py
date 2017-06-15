@@ -20,7 +20,7 @@ from lib import com_config, com_logger
 class POI:
     def __init__(self):
         # Log
-        self.logger = com_logger.Logger()
+        self.logger = com_logger.Logger('POI')
         
         # Config
         conf = com_config.Config()
@@ -41,23 +41,27 @@ class POI:
         dal.delcoordinate()
         self.logger.info('Import RadarFile')
         
-        for root, dirs, files in os.walk(self.config['RadarFile']['directory']):
+        for root, dirs, files in os.walk(self.config['RadarFile']['filedirectory']):
             for item in files:
                 src_path = os.path.join(root, item)
                 self.logger.info('Compute file: ' + item)
-                speed = item[:-4]
-                speed = speed[-3:]
-                country = item[:3]
-                with open(src_path, newline = '') as csvfile:
-                    spamreader = csv.reader(csvfile, delimiter = ',', quotechar = '|')
-                    for row in spamreader:
-                        self.logger.debug('Insert row: ' + row[0] + ' ' + row[1] + ' ' + row[2])
-                        lib = str.replace(row[2], '"', '')
-                        try:
-                            int(speed)
-                        except ValueError:
-                            speed = 0
-                        dal.setcoordinate(float(row[0]), float(row[1]), float(speed), lib, country)
+                try:
+                    speed = item[:-4]
+                    speed = speed[-3:]
+                    country = item[:3]
+                    with open(src_path, newline = '') as csvfile:
+                        spamreader = csv.reader(csvfile, delimiter = ',', quotechar = '|')
+                        for row in spamreader:
+                            lib = str.replace(row[2], '"', '')
+                            lib = lib[:-3]
+                            self.logger.debug('Insert: ' + row[0] + ' ' + row[1] + ' ' + lib[3:] + ' ' + country)
+                            try:
+                                int(speed)
+                            except ValueError:
+                                speed = 0
+                            dal.setcoordinate(float(row[0]), float(row[1]), float(speed), lib[3:], country)
+                except Exception as e:
+                    self.logger.error(item + ' ' + str(e))
     
     def getradararound(self, latitude, longitude, distancealerte):
         lat_x1 = latitude - float(self.config['DATA']['range'])
@@ -81,6 +85,7 @@ class POI:
                 listalerte.append(point)
         
         if len(listalerte) > 0:
-            listalerte.sort(key = itemgetter(3), reverse = False)
+            self.logger.info('Radar find: ' + str(len(listalerte)))
+            listalerte.sort(key = itemgetter(4), reverse = False)
         
         return listalerte

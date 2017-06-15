@@ -19,7 +19,7 @@ class DAL_radarcoordinate:
     
     def getaroundcoordinate(self, x1, x2, y1, y2):
         return self.cursor.execute(
-            'SELECT latitude, longitude, name FROM radarcoordinate WHERE ' + 'latitude>' + str(x1) + ' and latitude<' + str(x2) + ' and longitude>' + str(y1) + ' and longitude<' + str(y2)).fetchall()
+            'SELECT latitude, longitude, name, speed FROM radarcoordinate WHERE ' + 'latitude>' + str(x1) + ' and latitude<' + str(x2) + ' and longitude>' + str(y1) + ' and longitude<' + str(y2)).fetchall()
     
     """ Insert """
     

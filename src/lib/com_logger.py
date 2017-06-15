@@ -21,11 +21,11 @@ class Logger:
         self.logger.name = name
         
         # Formatter
-        formatterfile = logging.Formatter('%(asctime)s %(levelname)s : %(name)s - %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
-        formatterconsole = colorlog.ColoredFormatter('%(asctime)s %(log_color)s%(levelname)s : %(name)s - %(message)s', datefmt='%d/%m/%Y %H:%M:%S',
-                                                     log_colors={'DEBUG':    'white', 'INFO': 'green',
-                                                                 'WARNING':  'bold_yellow', 'ERROR': 'bold_red',
-                                                                 'CRITICAL': 'bold_red'})
+        formatterfile = logging.Formatter('%(asctime)s %(levelname)s : %(name)s - %(message)s', datefmt = '%d/%m/%Y %H:%M:%S')
+        formatterconsole = colorlog.ColoredFormatter('%(asctime)s %(log_color)s%(levelname)s : %(name)s - %(message)s', datefmt = '%d/%m/%Y %H:%M:%S',
+                                                     log_colors = {'DEBUG':    'white', 'INFO': 'green',
+                                                                   'WARNING':  'bold_yellow', 'ERROR': 'bold_red',
+                                                                   'CRITICAL': 'bold_red'})
         
         # First logger (file)
         self.logger.setLevel(logging.DEBUG)
