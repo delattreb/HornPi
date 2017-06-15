@@ -87,7 +87,7 @@ while True:
         if len(listealerte) > 0:
             cpt = 0
             for alerte in listealerte:
-                logger.debug(str(cpt) + '. ' + alerte[2] + ' Speed: ' + str(alerte[3]) + ' Dist: ' + str(round(alerte[4], 2)))
+                logger.debug(str(cpt) + '. ' + alerte[2] + ' Speed: ' + str(alerte[3]) + ' Dist: ' + str(round(alerte[4], 1)))
                 cpt += 1
 # endregion
     else:
